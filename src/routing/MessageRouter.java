@@ -341,7 +341,7 @@ public abstract class MessageRouter {
 
 		this.putToIncomingBuffer(newMessage, from);
 		newMessage.addNodeOnPath(this.host);
-
+		
 		for (MessageListener ml : this.mListeners) {
 			ml.messageTransferStarted(newMessage, from, getHost());
 		}
@@ -397,7 +397,11 @@ public abstract class MessageRouter {
 			// Otherwise the peer will just try to send it back again.
 			this.blacklistedMessages.put(id, null);
 		}
-
+		if(this.host.isItAFabricatingAttacker && aMessage.getTo()!=this.host){
+			String fabricatedNewMessage = aMessage.getContent() + " fab";
+			aMessage.setContent(fabricatedNewMessage);
+			aMessage.nrOfTimesFabricated++;
+		}
 		for (MessageListener ml : this.mListeners) {
 			ml.messageTransferred(aMessage, from, this.host,
 					isFirstDelivery);
@@ -678,5 +682,12 @@ public abstract class MessageRouter {
 		return getClass().getSimpleName() + " of " +
 			this.getHost().toString() + " with " + getNrofMessages()
 			+ " messages";
+	}
+	
+	public void removeMessage(Message message){
+		this.messages.remove(message);
+	}
+	public void verifyMessage(Message message){
+		this.messages.get(message.getId()).isItVerified = true;
 	}
 }

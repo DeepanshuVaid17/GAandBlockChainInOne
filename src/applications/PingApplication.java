@@ -127,6 +127,8 @@ public class PingApplication extends Application {
 			String id = "pong" + SimClock.getIntTime() + "-" +
 				host.getAddress();
 			Message m = new Message(host, msg.getFrom(), id, getPongSize());
+			m.isItFloodingMessage = msg.isItFloodingMessage;
+			m.nrOfTimesFabricated = msg.nrOfTimesFabricated;
 			m.addProperty("type", "pong");
 			m.setAppID(APP_ID);
 			host.createNewMessage(m);

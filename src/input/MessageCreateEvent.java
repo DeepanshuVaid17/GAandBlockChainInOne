@@ -43,6 +43,8 @@ public class MessageCreateEvent extends MessageEvent {
 
 		Message m = new Message(from, to, this.id, this.size);
 		m.setResponseSize(this.responseSize);
+		if(from.isItAFloodingAttacker)
+			m.isItFloodingMessage = true;
 		from.createNewMessage(m);
 	}
 

@@ -37,7 +37,10 @@ public class MessageStatsReport extends Report implements MessageListener {
 	private int nrofResponseReqCreated;
 	private int nrofResponseDelivered;
 	private int nrofDelivered;
-
+	private int fabricatedMessages;
+	private int fabricatedMessagesDelivered;
+	private int floodingMessages;
+	private int floodingMessagesDelivered;
 	/**
 	 * Constructor.
 	 */
@@ -63,6 +66,10 @@ public class MessageStatsReport extends Report implements MessageListener {
 		this.nrofResponseReqCreated = 0;
 		this.nrofResponseDelivered = 0;
 		this.nrofDelivered = 0;
+		this.fabricatedMessages = 0;
+		this.fabricatedMessagesDelivered = 0;
+		this.floodingMessages = 0;
+		this.floodingMessagesDelivered = 0;
 	}
 
 
@@ -98,7 +105,21 @@ public class MessageStatsReport extends Report implements MessageListener {
 		}
 
 		this.nrofRelayed++;
+		if(m.nrOfTimesFabricated == 1)
+			this.fabricatedMessages++;
+		
 		if (finalTarget) {
+			//Added by Deep
+			if(m.isItFloodingMessage){
+				this.floodingMessagesDelivered++;
+				return;
+			}
+			
+			if(m.nrOfTimesFabricated>0){
+				this.fabricatedMessagesDelivered++;
+				return;
+			}
+			//---
 			this.latencies.add(getSimTime() -
 				this.creationTimes.get(m.getId()) );
 			this.nrofDelivered++;
@@ -117,7 +138,10 @@ public class MessageStatsReport extends Report implements MessageListener {
 			addWarmupID(m.getId());
 			return;
 		}
-
+		if(m.isItFloodingMessage){
+			this.floodingMessages++;
+			return;
+		}
 		this.creationTimes.put(m.getId(), getSimTime());
 		this.nrofCreated++;
 		if (m.getResponseSize() > 0) {
@@ -130,7 +154,6 @@ public class MessageStatsReport extends Report implements MessageListener {
 		if (isWarmupID(m.getId())) {
 			return;
 		}
-
 		this.nrofStarted++;
 	}
 
@@ -172,7 +195,11 @@ public class MessageStatsReport extends Report implements MessageListener {
 			"\nbuffertime_avg: " + getAverage(this.msgBufferTime) +
 			"\nbuffertime_med: " + getMedian(this.msgBufferTime) +
 			"\nrtt_avg: " + getAverage(this.rtt) +
-			"\nrtt_med: " + getMedian(this.rtt)
+			"\nrtt_med: " + getMedian(this.rtt) +
+			"\nfabricatedMessages: " + this.fabricatedMessages +
+			"\nfabricatedMessagesDelivered: " + this.fabricatedMessagesDelivered +
+			"\nfloodingMessages: " + this.floodingMessages +
+			"\nfloodingMessages: " + this.floodingMessagesDelivered 
 			;
 
 		write(statsText);

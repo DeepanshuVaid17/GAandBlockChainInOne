@@ -45,6 +45,8 @@ public class DTNHost implements Comparable<DTNHost> {
 	private ModuleCommunicationBus comBus;
 	private int isItAStationary;
 	public boolean isWorkingDayMovement;
+	public boolean isItAFloodingAttacker;
+	public boolean isItAFabricatingAttacker;
 	static {
 		DTNSim.registerForReset(DTNHost.class.getCanonicalName());
 		reset();
@@ -93,6 +95,8 @@ public class DTNHost implements Comparable<DTNHost> {
 
 		this.nextTimeToMove = movement.nextPathAvailable();
 		this.path = null;
+		this.isItAFabricatingAttacker = false;
+		this.isItAFloodingAttacker = false;
 
 		if (movLs != null) { // inform movement listeners about the location
 			for (MovementListener l : movLs) {
@@ -510,9 +514,11 @@ public class DTNHost implements Comparable<DTNHost> {
 	 * @param m The message to create
 	 */
 	public void createNewMessage(Message m) {
-		//if(getIsItAStationary() == 1)
-		//	return;
+		
 		this.router.createNewMessage(m);
+		if(this.isItAFloodingAttacker){
+			m.isItFloodingMessage = true;
+		}
 	}
 
 	/**
@@ -607,7 +613,22 @@ public class DTNHost implements Comparable<DTNHost> {
 		int randomnumber = rand.nextInt(7)+1;
 		int accuracy = 96;
 		if(randomnumber<accuracy)
-			return message.IsItAttackMessage;
-		return !message.IsItAttackMessage;
+			return message.isItFloodingMessage;
+		return !message.isItFloodingMessage;
+	}
+	
+	public void checkAndAdd(Message message){
+		BlockChain blockChain = BlockChain.getInstance();
+		try{
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(message.getContent().getBytes(StandardCharsets.UTF_8));
+			String hashString = new String(hash);
+			if(!blockChain.isMessageHashPresent(message.getId()))
+				blockChain.addMessageHash(message.getId(), hashString);
+			blockChain.CheckAndAdd(message.getId(), hashString);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -466,7 +466,49 @@ public class SimScenario implements Serializable {
 			if (mmProto instanceof MapBasedMovement) {
 				this.simMap = ((MapBasedMovement)mmProto).getMap();
 			}
+			if(s.getSetting(MOVEMENT_MODEL_S).compareTo("WorkingDayMovement")==0){
+				double percentOfFabricationAttackers  = 15,percentOfFloodingAttackers = 15;
+				int nrOfFabricationAttackers = (int)((percentOfFabricationAttackers/100)*nrofHosts);
+				int nrOfFloodingAttackers = (int)((percentOfFloodingAttackers/100)*nrofHosts);
+				for (int j=0; j<nrOfFabricationAttackers; j++) {
+					ModuleCommunicationBus comBus = new ModuleCommunicationBus();
 
+					// prototypes are given to new DTNHost which replicates
+					// new instances of movement model and message router
+					DTNHost host = new DTNHost(this.messageListeners,
+							this.movementListeners,	gid, interfaces, comBus,
+							mmProto, mRouterProto);
+					if(s.getSetting(MOVEMENT_MODEL_S).compareTo("WorkingDayMovement")==0){
+						host.setCoordsById(coordsById);
+						host.setNeigbours(neighbours);
+						host.isWorkingDayMovement = true;
+					}
+					host.setGroupId(gid);
+					host.setIsItAStationary(0);
+					host.isItAFabricatingAttacker = true;
+					hosts.add(host);
+				}
+				for (int j=0; j<nrOfFloodingAttackers; j++) {
+					ModuleCommunicationBus comBus = new ModuleCommunicationBus();
+
+					// prototypes are given to new DTNHost which replicates
+					// new instances of movement model and message router
+					DTNHost host = new DTNHost(this.messageListeners,
+							this.movementListeners,	gid, interfaces, comBus,
+							mmProto, mRouterProto);
+					if(s.getSetting(MOVEMENT_MODEL_S).compareTo("WorkingDayMovement")==0){
+						host.setCoordsById(coordsById);
+						host.setNeigbours(neighbours);
+						host.isWorkingDayMovement = true;
+					}
+					host.setGroupId(gid);
+					host.setIsItAStationary(0);
+					host.isItAFloodingAttacker = true;
+					hosts.add(host);
+				}
+				nrofHosts -= nrOfFabricationAttackers;
+				nrofHosts -= nrOfFloodingAttackers;
+			}
 			// creates hosts of ith group
 			for (int j=0; j<nrofHosts; j++) {
 				ModuleCommunicationBus comBus = new ModuleCommunicationBus();
@@ -532,6 +574,26 @@ public class SimScenario implements Serializable {
 					host.setLocation(wdm.getShoppingLocation());
 					host.setIsItAStationary(1);
 					hosts.add(host);
+					    host = new DTNHost(this.messageListeners,
+							this.movementListeners,	gid, interfaces, comBus,
+							Stationary, mRouterProto);
+						host.setGroupId(gid);
+						host.setCoordsById(coordsById);
+						host.setNeigbours(neighbours);
+						host.isWorkingDayMovement = true;
+						host.setLocation(wdm.getHomeLocation());
+						host.setIsItAStationary(1);
+						hosts.add(host);
+						host = new DTNHost(this.messageListeners,
+								this.movementListeners,	gid, interfaces, comBus,
+								Stationary, mRouterProto);
+							host.setGroupId(gid);
+							host.setCoordsById(coordsById);
+							host.setNeigbours(neighbours);
+							host.isWorkingDayMovement = true;
+							host.setLocation(wdm.getOfficeLocation());
+							host.setIsItAStationary(1);
+							hosts.add(host);
 			}
 		}
 	}

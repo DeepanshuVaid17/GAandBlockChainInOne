@@ -44,8 +44,12 @@ public class Message implements Comparable<Message> {
 	//Content of the message
 	private String Content;
 	
-	//Is it a attack message
-	public boolean IsItAttackMessage;
+	//Is it a flooding attack message
+	public boolean isItFloodingMessage;
+	
+	public int nrOfTimesFabricated;
+	
+	public boolean isItVerified;
 
 	/** Container for generic message properties. Note that all values
 	 * stored in the properties should be immutable because only a shallow
@@ -75,7 +79,8 @@ public class Message implements Comparable<Message> {
 		this.size = size;
 		this.path = new ArrayList<DTNHost>();
 		this.uniqueId = nextUniqueId;
-		this.IsItAttackMessage = false;
+		this.nrOfTimesFabricated = 0;
+		this.isItFloodingMessage = false;
 		this.Content = "NON";
 		this.timeCreated = SimClock.getTime();
 		this.timeReceived = this.timeCreated;
@@ -84,7 +89,7 @@ public class Message implements Comparable<Message> {
 		this.requestMsg = null;
 		this.properties = null;
 		this.appID = null;
-
+		this.isItVerified = false;
 		Message.nextUniqueId++;
 		addNodeOnPath(from);    
 	}
@@ -334,6 +339,8 @@ public class Message implements Comparable<Message> {
 	 */
 	public Message replicate() {
 		Message m = new Message(from, to, id, size);
+		m.isItFloodingMessage = this.isItFloodingMessage;
+		m.nrOfTimesFabricated = this.nrOfTimesFabricated;
 		m.copyFrom(this);
 		return m;
 	}

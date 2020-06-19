@@ -52,7 +52,7 @@ public class SprayAndWaitRouter extends ActiveRouter {
 //		initialNrofCopies = snwSettings.getInt(NROF_COPIES);
 //		isBinary = snwSettings.getBoolean( BINARY_MODE);
 		this.chromosomes = new ArrayList<ArrayList<Integer>>();
-		this.populationSize = 1;
+		this.populationSize = 2;
 		this.NoOfGroupsInChromosome = 3;
 		this.NoOfBitsForGroupNumber = 3;
 		this.chromosomeSize = NoOfGroupsInChromosome*NoOfBitsForGroupNumber;
@@ -189,6 +189,10 @@ public class SprayAndWaitRouter extends ActiveRouter {
 		coordsById = this.getHost().getCoordsById();
 		neighbours = this.getHost().getNeigbours();
 		Collection<Message> messages = this.getMessageCollection();
+		Collection<Message> messagesCp = new ArrayList<Message>();
+		for(Message m : messages){
+			messagesCp.add(m);
+		}
 		List<Connection> connections = getConnections();
 		DTNHost stationaryNode = getHost();
 		for(Connection con:connections){
@@ -198,17 +202,26 @@ public class SprayAndWaitRouter extends ActiveRouter {
 				break;
 			}
 		}
-		for(Message m : messages){
-			if(stationaryNode != getHost()){
+		for(Message m : messagesCp){
+			if(stationaryNode.getIsItAStationary() == 1){
+				if(m.getFrom()==this.getHost()){
+					stationaryNode.checkAndAdd(m);
+				}
 				if(!stationaryNode.isMessageUnchanged(m)){
-					this.getMessageCollection().remove(m);
+					this.removeMessage(m);
 				}
 				else if(stationaryNode.isItAnAttackMessage(m)){
-					this.getMessageCollection().remove(m);
+					this.removeMessage(m);
+				}
+				else{
+					this.verifyMessage(m);
 				}
 			}
 		}
+		messages = this.getMessageCollection();
 		for(Message m : messages){
+			//if(!m.isItVerified&&!getHost().isItAFabricatingAttacker&&!getHost().isItAFloodingAttacker)
+			//	continue;
 			List<Message> sendMessage = new ArrayList<Message>();
 			List<Connection> tryConnection = new ArrayList<Connection>();
 			sendMessage.add(m);
@@ -235,8 +248,10 @@ public class SprayAndWaitRouter extends ActiveRouter {
 						threshold = 16*threshold*threshold;
 						if(fitnessFunction(chromosomes.get(0),m,to.getGroupId())<threshold){
 							tryConnection.add(con);
+							break;
 						}
-						for(int i = 0;i+1<chromosomes.size();i++){
+						int initsize =chromosomes.size();
+						for(int i = 0;i+1<initsize;i+=2){
 							crossover(chromosomes.get(i),chromosomes.get(i+1));
 						}
 					}
