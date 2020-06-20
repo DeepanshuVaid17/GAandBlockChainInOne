@@ -233,6 +233,7 @@ public class DTNHost implements Comparable<DTNHost> {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 
 	/**
 	 * Returns the messages in a collection.
@@ -610,7 +611,7 @@ public class DTNHost implements Comparable<DTNHost> {
 	
 	public boolean isItAnAttackMessage(Message message){
 		Random rand = new Random();
-		int randomnumber = rand.nextInt(7)+1;
+		int randomnumber = rand.nextInt(100);
 		int accuracy = 96;
 		if(randomnumber<accuracy)
 			return message.isItFloodingMessage;

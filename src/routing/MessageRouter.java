@@ -685,7 +685,7 @@ public abstract class MessageRouter {
 	}
 	
 	public void removeMessage(Message message){
-		this.messages.remove(message);
+		this.messages.remove(message.getId());
 	}
 	public void verifyMessage(Message message){
 		this.messages.get(message.getId()).isItVerified = true;

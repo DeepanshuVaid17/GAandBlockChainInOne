@@ -220,7 +220,7 @@ public class SprayAndWaitRouter extends ActiveRouter {
 		}
 		messages = this.getMessageCollection();
 		for(Message m : messages){
-			//if(!m.isItVerified&&!getHost().isItAFabricatingAttacker&&!getHost().isItAFloodingAttacker)
+			//if(!m.isItVerified)
 			//	continue;
 			List<Message> sendMessage = new ArrayList<Message>();
 			List<Connection> tryConnection = new ArrayList<Connection>();
