@@ -338,7 +338,7 @@ public abstract class MessageRouter {
 	 */
 	public int receiveMessage(Message m, DTNHost from) {
 		Message newMessage = m.replicate();
-
+		
 		this.putToIncomingBuffer(newMessage, from);
 		newMessage.addNodeOnPath(this.host);
 		
@@ -389,6 +389,11 @@ public abstract class MessageRouter {
 		if (!isFinalRecipient && outgoing!=null) {
 			// not the final recipient and app doesn't want to drop the message
 			// -> put to buffer
+			if(this.host.isItAFabricatingAttacker && aMessage.getTo().compareTo(this.host)!=0 && aMessage.getFrom().compareTo(this.host)!=0){
+				String fabricatedNewMessage = aMessage.getContent() + " fab";
+				aMessage.setContent(fabricatedNewMessage);
+				aMessage.nrOfTimesFabricated++;
+			}
 			addToMessages(aMessage, false);
 		} else if (isFirstDelivery) {
 			this.deliveredMessages.put(id, aMessage);
@@ -397,11 +402,7 @@ public abstract class MessageRouter {
 			// Otherwise the peer will just try to send it back again.
 			this.blacklistedMessages.put(id, null);
 		}
-		if(this.host.isItAFabricatingAttacker && aMessage.getTo()!=this.host){
-			String fabricatedNewMessage = aMessage.getContent() + " fab";
-			aMessage.setContent(fabricatedNewMessage);
-			aMessage.nrOfTimesFabricated++;
-		}
+		
 		for (MessageListener ml : this.mListeners) {
 			ml.messageTransferred(aMessage, from, this.host,
 					isFirstDelivery);

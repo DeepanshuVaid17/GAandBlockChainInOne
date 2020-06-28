@@ -600,6 +600,7 @@ public class DTNHost implements Comparable<DTNHost> {
 			String hashString = new String(hash);
 			if(!blockChain.isMessageHashPresent(message.getId()))
 				blockChain.addMessageHash(message.getId(), hashString);
+			
 			return blockChain.isMessageHashValid(message.getId(), hashString);
 			
 		}catch (Exception e) {
@@ -624,9 +625,7 @@ public class DTNHost implements Comparable<DTNHost> {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(message.getContent().getBytes(StandardCharsets.UTF_8));
 			String hashString = new String(hash);
-			if(!blockChain.isMessageHashPresent(message.getId()))
-				blockChain.addMessageHash(message.getId(), hashString);
-			blockChain.CheckAndAdd(message.getId(), hashString);
+			blockChain.addMessageHash(message.getId(), hashString);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

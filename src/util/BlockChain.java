@@ -30,18 +30,7 @@ public class BlockChain {
 		 return false;
 	 }
 	 public void CheckAndAdd(String messageId,String hashValue){
-		 Pair<String,String> p = new Pair<String,String>(messageId,hashValue);
-		 int ch = 0;
-		 for(Pair<String,String> message:MessagesHash){
-			 if(message.getKey().equals(messageId)){
-				 p = message;
-				 ch=1;
-				 return;
-			 }
-		 }
-		 if(ch == 1){
-			 MessagesHash.remove(p);
-		 }
+		 
 		 MessagesHash.add(new Pair<String,String>(messageId,hashValue));
 	 }
 	 public void addMessageHash(String messageId,String hashValue){

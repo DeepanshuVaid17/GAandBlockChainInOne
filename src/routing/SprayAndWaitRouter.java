@@ -204,7 +204,9 @@ public class SprayAndWaitRouter extends ActiveRouter {
 		}
 		for(Message m : messagesCp){
 			if(stationaryNode.getIsItAStationary() == 1){
-				if(m.getFrom()==this.getHost()){
+				if(m.isItVerified)
+					continue;
+				if(m.getFrom().compareTo(getHost()) == 0){
 					stationaryNode.checkAndAdd(m);
 				}
 				if(!stationaryNode.isMessageUnchanged(m)){
@@ -220,8 +222,8 @@ public class SprayAndWaitRouter extends ActiveRouter {
 		}
 		messages = this.getMessageCollection();
 		for(Message m : messages){
-			//if(!m.isItVerified)
-			//	continue;
+			if(!m.isItVerified)
+				continue;
 			List<Message> sendMessage = new ArrayList<Message>();
 			List<Connection> tryConnection = new ArrayList<Connection>();
 			sendMessage.add(m);

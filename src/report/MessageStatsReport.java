@@ -37,6 +37,8 @@ public class MessageStatsReport extends Report implements MessageListener {
 	private int nrofResponseReqCreated;
 	private int nrofResponseDelivered;
 	private int nrofDelivered;
+	private int fabricatedMessagesRelayed;
+	private int floodingMessagesRelayed;
 	private int fabricatedMessages;
 	private int fabricatedMessagesDelivered;
 	private int floodingMessages;
@@ -103,10 +105,20 @@ public class MessageStatsReport extends Report implements MessageListener {
 		if (isWarmupID(m.getId())) {
 			return;
 		}
-
-		this.nrofRelayed++;
-		if(m.nrOfTimesFabricated == 1)
+		if(m.isItFloodingMessage){
+			this.floodingMessagesRelayed++;
+			
+		}
+		
+		if(m.nrOfTimesFabricated>1){
+			this.fabricatedMessagesRelayed++;
+		}
+		if(m.nrOfTimesFabricated==0 && m.isItFloodingMessage==false)
+			this.nrofRelayed++;
+		if(m.nrOfTimesFabricated == 1){
+			m.nrOfTimesFabricated++;
 			this.fabricatedMessages++;
+		}
 		
 		if (finalTarget) {
 			//Added by Deep
@@ -199,7 +211,9 @@ public class MessageStatsReport extends Report implements MessageListener {
 			"\nfabricatedMessages: " + this.fabricatedMessages +
 			"\nfabricatedMessagesDelivered: " + this.fabricatedMessagesDelivered +
 			"\nfloodingMessages: " + this.floodingMessages +
-			"\nfloodingMessages: " + this.floodingMessagesDelivered 
+			"\nfloodingMessagesDelivered: " + this.floodingMessagesDelivered +
+			"\nfloodingMessagesRelayed: " + this.floodingMessagesRelayed +
+			"\nfabricatedMessagesRelayed: " + this.fabricatedMessagesRelayed
 			;
 
 		write(statsText);

@@ -333,7 +333,7 @@ public class SimScenario implements Serializable {
 		
 		// Deepanshu added this part
 		
-		for(int i = 1;i<nrofGroups;i++){
+		for(int i = 1;i<=nrofGroups;i++){
 			Settings s = new Settings(GROUP_NS+i);
 			s.setSecondaryNamespace(GROUP_NS);
 			String gid = s.getSetting(GROUP_ID_S);

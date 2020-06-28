@@ -274,7 +274,9 @@ public class Message implements Comparable<Message> {
 		this.requestMsg  = m.requestMsg;
 		this.initTtl = m.initTtl;
 		this.appID = m.appID;
-
+		this.Content = m.Content;
+		this.isItFloodingMessage = m.isItFloodingMessage;
+		this.nrOfTimesFabricated = m.nrOfTimesFabricated;
 		if (m.properties != null) {
 			Set<String> keys = m.properties.keySet();
 			for (String key : keys) {
@@ -339,6 +341,7 @@ public class Message implements Comparable<Message> {
 	 */
 	public Message replicate() {
 		Message m = new Message(from, to, id, size);
+		m.Content = this.Content;
 		m.isItFloodingMessage = this.isItFloodingMessage;
 		m.nrOfTimesFabricated = this.nrOfTimesFabricated;
 		m.copyFrom(this);
