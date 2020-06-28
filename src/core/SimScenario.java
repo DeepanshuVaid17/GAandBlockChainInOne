@@ -445,7 +445,7 @@ public class SimScenario implements Serializable {
 				try {
 					// Get name of the application for this group
 					appname = s.getSetting(GAPPNAME_S+j);
-					// Get settings for the given application
+					// Get settings for the given application  
 					Settings t = new Settings(appname);
 					// Load an instance of the application
 					protoApp = (Application)t.createIntializedObject(

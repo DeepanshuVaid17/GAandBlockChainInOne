@@ -6,7 +6,7 @@ Scenario.updateInterval = 1
 Scenario.endTime = 86k
 
 Report.warmup = 200000
-Group.msgTtl = 1433
+Group.msgTtl = 1400
 Events.nrof = 1
 Scenario.nrofHostGroups = 17
 
@@ -39,7 +39,7 @@ Group.officeMinWaitTime = 10
 Group.officeMaxWaitTime = 100000
 Group.officeSize = 100
 
-Group.nrofHosts = 0
+Group.nrofHosts = 50
 
 Group.timeDiffSTD = 7200
 Group.minGroupSize = 1
@@ -50,6 +50,7 @@ Group.maxAfterShoppingStopTime = 7200
 ####################################################
 Group1.groupID = o
 Group1.speed = 7, 10
+Group1.router = EpidemicRouter
 Group1.waitTime = 10, 30
 Group1.nrofHosts = 2
 Group1.movementModel = BusMovement
@@ -59,16 +60,15 @@ Group1.busControlSystemNr = 1
 
 Group2.groupID = A
 Group2.waitTime = 0, 0
-Group2.nrofHosts = 150
 Group2.movementModel = WorkingDayMovement
 Group2.busControlSystemNr = 1
 Group2.speed = 0.8, 1.4
-Group2.router = SprayAndWaitRouter
 Group2.ownCarProb = 0.5
 Group2.shoppingControlSystemNr = 1
 Group2.meetingSpotsFile = data/HelsinkiMedium/A_meetingspots.wkt
 Group2.officeLocationsFile = data/HelsinkiMedium/A_offices.wkt
 Group2.homeLocationsFile = data/HelsinkiMedium/A_homes.wkt
+Group2.nrofHosts = 150
 
 Group3.groupID = p
 Group3.speed = 7, 10
@@ -78,11 +78,11 @@ Group3.movementModel = BusMovement
 Group3.routeFile = data/HelsinkiMedium/B_bus.wkt
 Group3.routeType = 2
 Group3.busControlSystemNr = 2
+Group3.router = EpidemicRouter
 
 Group4.groupID = B
-Group4.router = SprayAndWaitRouter
-Group4.waitTime = 0, 0
 Group4.nrofHosts = 50
+Group4.waitTime = 0, 0
 Group4.movementModel = WorkingDayMovement
 Group4.busControlSystemNr = 2
 Group4.speed = 0.8, 1.4
@@ -100,9 +100,9 @@ Group5.movementModel = BusMovement
 Group5.routeFile = data/HelsinkiMedium/C_bus.wkt
 Group5.routeType = 2
 Group5.busControlSystemNr = 3
+Group5.router = EpidemicRouter
 
 Group6.groupID = C
-Group6.router = SprayAndWaitRouter
 Group6.waitTime = 0, 0
 Group6.nrofHosts = 100
 Group6.movementModel = WorkingDayMovement
@@ -122,9 +122,9 @@ Group7.movementModel = BusMovement
 Group7.routeFile = data/HelsinkiMedium/D_bus.wkt
 Group7.routeType = 2
 Group7.busControlSystemNr = 4
+Group7.router = EpidemicRouter
 
 Group8.groupID = D
-Group8.router = SprayAndWaitRouter
 Group8.waitTime = 0, 0
 Group8.nrofHosts = 100
 Group8.movementModel = WorkingDayMovement
@@ -144,9 +144,9 @@ Group9.movementModel = BusMovement
 Group9.routeFile = data/HelsinkiMedium/E_bus.wkt
 Group9.routeType = 2
 Group9.busControlSystemNr = 5
+Group9.router = EpidemicRouter
 
 Group10.groupID = E
-Group10.router = SprayAndWaitRouter
 Group10.waitTime = 0, 0
 Group10.nrofHosts = 100
 Group10.movementModel = WorkingDayMovement
@@ -166,11 +166,11 @@ Group11.movementModel = BusMovement
 Group11.routeFile = data/HelsinkiMedium/F_bus.wkt
 Group11.routeType = 2
 Group11.busControlSystemNr = 6
+Group11.router = EpidemicRouter
 
 Group12.groupID = F
-Group12.router = SprayAndWaitRouter
-Group12.waitTime = 0, 0
 Group12.nrofHosts = 150
+Group12.waitTime = 0, 0
 Group12.movementModel = WorkingDayMovement
 Group12.busControlSystemNr = 6
 Group12.speed = 0.8, 1.4
@@ -188,9 +188,9 @@ Group13.movementModel = BusMovement
 Group13.routeFile = data/HelsinkiMedium/G_bus.wkt
 Group13.routeType = 2
 Group13.busControlSystemNr = 7
+Group13.router = EpidemicRouter
 
 Group14.groupID = G
-Group14.router = SprayAndWaitRouter
 Group14.waitTime = 0, 0
 Group14.nrofHosts = 150
 Group14.movementModel = WorkingDayMovement
@@ -210,6 +210,7 @@ Group15.movementModel = BusMovement
 Group15.routeFile = data/HelsinkiMedium/H_bus.wkt
 Group15.routeType = 2
 Group15.busControlSystemNr = 8
+Group15.router = EpidemicRouter
 
 Group16.groupID = H
 Group16.waitTime = 0, 0
@@ -221,8 +222,10 @@ Group16.ownCarProb = 0.5
 Group16.shoppingControlSystemNr = 8
 Group16.nrOfOffices = 40
 Group16.nrOfMeetingSpots = 5
+Group16.router = EpidemicRouter
 
 Group17.groupID = K
+Group17.router = EpidemicRouter
 Group17.movementModel = ShortestPathMapBasedMovement
 Group17.waitTime = 100, 300
 Group17.speed = 7, 10
@@ -283,11 +286,11 @@ Events.nrof = 1
 Events1.class = MessageEventGenerator
 # (following settings are specific for the MessageEventGenerator class)
 # Creation interval in seconds (one new message every 25 to 35 seconds)
-Events1.interval = 25,35
+Events1.interval = 25, 35
 # Message sizes (500kB - 1MB)
 Events1.size = 500k,1M
 # range of message source/destination addresses
-Events1.hosts = 0,1174
+Events1.hosts = 0,1188
 # Message ID prefix
 Events1.prefix = M
 

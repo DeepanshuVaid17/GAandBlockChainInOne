@@ -29,7 +29,7 @@ Group.interface1 = firstinterface
 Group.speed = 0.5, 1.5
 #Group.msgTtl = 60
 
-Group.nrofHosts = 40
+Group.nrofHosts = 50
 Group.nrofApplications = 0
 
 # group1 (pedestrians) specific settings

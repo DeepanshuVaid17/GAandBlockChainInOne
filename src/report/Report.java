@@ -115,7 +115,7 @@ public abstract class Report {
 		else {
 			// no output name define -> construct one from report class' name
 			settings.setNameSpace(null);
-			String outDir = settings.getSetting(REPORTDIR_SETTING);
+			String outDir = settings.getSetting(REPORTDIR_SETTING)+"TTL  "+settings.getSetting("Group.msgTtl")+" buf"+settings.getSetting("Group.bufferSize")+" int"+settings.getSetting("Events1.interval")+settings.getSetting("Group.router");
 			if (!outDir.endsWith("/")) {
 				outDir += "/";	// make sure dir ends with directory delimiter
 			}
